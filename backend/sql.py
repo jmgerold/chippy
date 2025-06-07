@@ -1,5 +1,6 @@
 import duckdb
 from .formats import DatasetSchema
+import sys
 
 def get_sql_conn(schema: DatasetSchema) -> duckdb.duckdb.DuckDBPyConnection:
 
@@ -8,8 +9,8 @@ def get_sql_conn(schema: DatasetSchema) -> duckdb.duckdb.DuckDBPyConnection:
     # Create column definitions from schema
     column_definitions = []
     for column_name, column_type in zip(schema.columns, schema.types):
-        column_definitions.append(f"{column_name} {column_type}")
-    
+        quoted_name = f'"{column_name}"'
+        column_definitions.append(f"{quoted_name} {column_type}")    
     columns_sql = ",\n        ".join(column_definitions)
     
     create_table_sql = f"""
@@ -22,7 +23,7 @@ def get_sql_conn(schema: DatasetSchema) -> duckdb.duckdb.DuckDBPyConnection:
     
     return conn
 
-def add_secondary_sql_table(conn: duckdb.duckdb.DuckDBPyConnection, csv: str) -> duckdb.duckdb.DuckDBPyConnection:
+def add_secondary_sql_table(conn: duckdb.duckdb.DuckDBPyConnection, csv: str, sql_command: str = "") -> bool:
 
     try: 
         with open('/tmp/secondary_table.csv', 'w') as f:
@@ -53,9 +54,14 @@ def add_secondary_sql_table(conn: duckdb.duckdb.DuckDBPyConnection, csv: str) ->
         CREATE TABLE secondary_table AS
         SELECT * FROM csv_read WHERE NOT ({conditions});
         """)
+        
+        # Execute the SQL command from the relevance check if provided
+        if sql_command:
+            print(f"Executing SQL command: {sql_command}", file=sys.stderr)
+            conn.execute(sql_command)
     
     except Exception as e:
-        print(e)
+        print(f"Error in add_secondary_sql_table: {e}", file=sys.stderr)
         return False
     
     return True

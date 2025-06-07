@@ -27,7 +27,6 @@ from .utils import (
     extract_table_nodes,
     is_table_relevant,
     xml_table_to_csv,
-    merge_csv_blobs,
 )
 
 from .formats import DatasetSchema
@@ -47,7 +46,7 @@ print("FastAPI app created, adding routes...", file=sys.stderr)
 # ---------------------------------------------------------------------------#
 #  Orchestrator
 # ---------------------------------------------------------------------------#
-def build_csv_for_query(schema: DatasetSchema) -> tuple[str, str]:
+def build_csv_for_query(schema: DatasetSchema) -> str:
     """Return (csv_text, temp_file_path)."""
     print(f"Created schema: {schema}", file=sys.stderr)
 
@@ -59,9 +58,22 @@ def build_csv_for_query(schema: DatasetSchema) -> tuple[str, str]:
 
     for path in matched_files:
         xml_text = gzip.open(path, 'rt', errors='ignore').read()
-        for i, tbl_xml in enumerate(extract_table_nodes(xml_text)):
+
+        xml_tables = extract_table_nodes(xml_text)
+        for i, tbl_xml in enumerate(xml_tables):
+            if i > 1:
+                break
+            print(f"Processing table {i} of {len(xml_tables)}", file=sys.stderr)
             csv = xml_table_to_csv(tbl_xml)
-            is_relevant, sql_command = is_table_relevant(csv, schema.columns)
+
+            if not csv:
+                continue
+
+            is_relevant, sql_command = is_table_relevant(csv, schema)
+
+            print(f"csv: {csv}", file=sys.stderr)
+
+            print(f"is_relevant: {is_relevant}, sql_command: {sql_command}", file=sys.stderr)
 
             if is_relevant:
                 add_secondary_sql_table(conn, csv, sql_command)
