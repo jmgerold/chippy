@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Patent Table Extractor</title>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 2rem; }
+    label { display:block; margin-top:1rem; }
+    input, textarea { width: 100%; padding: .5rem; }
+    button { margin-top: 1rem; padding: .5rem 1rem; }
+    #status { margin-top:1rem; }
+  </style>
+</head>
+<body>
+  <h1>Patent Table Extractor</h1>
+  <form id="extract-form">
+    <label>
+      Search terms:
+      <input type="text" id="query" required placeholder="e.g. battery separator" />
+    </label>
+    <label>
+      Desired columns (comma‑separated):
+      <input type="text" id="columns" required placeholder="Material, Thickness, Temperature" />
+    </label>
+    <button type="submit">Extract</button>
+  </form>
+  <div id="status"></div>
+  <script src="script.js"></script>
+</body>
+</html>
