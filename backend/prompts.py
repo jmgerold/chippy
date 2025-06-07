@@ -1,6 +1,7 @@
 import duckdb
 import json
 from .sql import add_secondary_sql_table, get_sql_types, get_sql_head
+from .formats import DatasetSchema, Table
 
 def create_xml_to_csv_prompt(table_xml_str: str) -> str:
     return f"""
@@ -30,62 +31,39 @@ def create_xml_to_csv_prompt(table_xml_str: str) -> str:
     Inputs:
     table XML:{table_xml_str}"""
 
-def create_sql_prompt(conn: duckdb.duckdb.DuckDBPyConnection, response: dict) -> str:
-
-    try:
-        response_content = json.loads(response['response']['body']['choices'][0]['message']['content'])
-    except:
-        return False
+def create_relevance_prompt(schema: DatasetSchema, new_table: Table) -> str:
+    # Create schema description for primary table
+    primary_schema_desc = []
+    for col, col_type in zip(schema.columns, schema.types):
+        primary_schema_desc.append(f"- {col} ({col_type})")
     
-    table_description = response_content['table_description']
-    column_descriptions = response_content['column_descriptions']
+    primary_schema_str = "\n    ".join(primary_schema_desc)
 
-    if not add_secondary_sql_table(conn, response_content['csv']):
-        # CSV not loaded:
-        return False
-
-    table_types = get_sql_types(conn)
-    table_head = get_sql_head(conn)
-
-    if table_types == None or table_head == None:
-        return False
-
+    newline_char = '\n'
+    
     return f"""
-    Your goal is to produce a dataset of antisense-oligonucleotide sequences and their inhibition percentages.
-    To do so you must evaluate whether two tables are compatible for stacking and if so to stack them using a SQL command.
+    Evaluate if the secondary table is compatible with the primary table for stacking (INSERT INTO).
 
-    Required Columns in secondary_table:
-    1. ASO sequence (case insensitive)
-    2. One of:
-       - inhibition/knockdown percentage
-       -  UTC (Untreated Control) percentage
-    
-    Transformation Rules:
-    - Numeric columns -> DOUBLE
-    
+    Goal: {schema.query}
+
     Tasks:
     1. Check compatibility:
-       - Verify required columns exist
-       - Validate data quality
-       - Return false if validation fails
-    
+    - Verify secondary table has columns that map to primary table columns
+    - Validate data quality and types
+    - Return false if incompatible
+
     2. If compatible, generate SQL:
-       - Stack (INSERT INTO) secondary_table onto primary_table
-       - Apply transformations as needed
+    - Stack secondary_table into primary_table using INSERT INTO
+    - Map column names appropriately
 
     Output Format:
-    - is_relevant: boolean (true/false)
-    - sql_command: string containing complete SQL Command if is_relevant=true, empty string if false
+    - is_relevant: boolean
+    - sql_command: complete SQL if compatible, empty string if not
 
-    Data:
-    primary_table:
-    Schema:
-    - aso_sequence_5_to_3 (VARCHAR): 5'-3' ASO nucleotide sequence
-    - inhibition_percent (DOUBLE): target inhibition percentage, range 0-100
+    Primary Table Schema:
+        {primary_schema_str}
 
-    secondary_table:
-    Description: {table_description}
-    Schema: {column_descriptions}
-    Types: {table_types}
-    First 3 rows: {table_head}
-    """
+    Secondary Table:
+    Description: {new_table.table_description}
+    Columns: {[col.column_name + ": " + col.description for col in new_table.column_descriptions]}
+    Data Sample: {new_table.csv.split(newline_char)[0:3]}"""
