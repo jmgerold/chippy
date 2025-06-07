@@ -1,0 +1,674 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tables id="TABLE-US-00001" num="00001">
+<table frame="none" colsep="0" rowsep="0">
+<tgroup align="left" colsep="0" rowsep="0" cols="1">
+<colspec colname="1" colwidth="217pt" align="center"/>
+<thead>
+<row>
+<entry namest="1" nameend="1" rowsep="1">TABLE 1</entry>
+</row>
+</thead>
+<tbody valign="top">
+<row>
+<entry namest="1" nameend="1" align="center" rowsep="1"/>
+</row>
+<row>
+<entry>Phenotypic biomarkers and responsive endogenous genes/promoters</entry>
+</row>
+</tbody>
+</tgroup>
+<tgroup align="left" colsep="0" rowsep="0" cols="3">
+<colspec colname="1" colwidth="63pt" align="left"/>
+<colspec colname="2" colwidth="84pt" align="left"/>
+<colspec colname="3" colwidth="70pt" align="left"/>
+<tbody valign="top">
+<row>
+<entry/>
+<entry>Phenotypic marker or </entry>
+<entry>Responsive gene or </entry>
+</row>
+<row>
+<entry>Crop species</entry>
+<entry>characteristic</entry>
+<entry>condition</entry>
+</row>
+<row>
+<entry namest="1" nameend="3" align="center" rowsep="1"/>
+</row>
+<row>
+<entry><i>Triticum</i>. spp</entry>
+<entry>Diketone wax (Waxy </entry>
+<entry>TaNAC2-5A (nitrate-</entry>
+</row>
+<row>
+<entry/>
+<entry>phenotype)</entry>
+<entry>inducible)</entry>
+</row>
+<row>
+<entry><i>Triticum</i>. spp</entry>
+<entry>Anthocyanin</entry>
+<entry>Identification of weeds </entry>
+</row>
+<row>
+<entry/>
+<entry>three genes (Rc- A1, Rc-</entry>
+<entry>versus wheat plants</entry>
+</row>
+<row>
+<entry/>
+<entry>B1 and Rc-D1) for red </entry>
+<entry/>
+</row>
+<row>
+<entry/>
+<entry>coleoptile, three genes for </entry>
+<entry/>
+</row>
+<row>
+<entry/>
+<entry>purple culm (Pc-A1, Pc-</entry>
+<entry/>
+</row>
+<row>
+<entry/>
+<entry>B1, Pc-D1), three genes</entry>
+<entry/>
+</row>
+<row>
+<entry/>
+<entry>for purple leaf sheath (Pls-</entry>
+<entry/>
+</row>
+<row>
+<entry/>
+<entry>A1, Pls-B1, Pls-D1), three </entry>
+<entry/>
+</row>
+<row>
+<entry/>
+<entry>homoeologous for purple</entry>
+<entry/>
+</row>
+<row>
+<entry/>
+<entry>leaf blades (Plb-A1, Plb-</entry>
+<entry/>
+</row>
+<row>
+<entry/>
+<entry>B1, PlbD1), two genes for </entry>
+<entry/>
+</row>
+<row>
+<entry/>
+<entry>purple anther (Pan-Al and</entry>
+<entry/>
+</row>
+<row>
+<entry/>
+<entry>Pan-D1) and two genes for </entry>
+<entry/>
+</row>
+<row>
+<entry/>
+<entry>purple pericarp, (Ppl and </entry>
+<entry/>
+</row>
+<row>
+<entry/>
+<entry>Pp3)</entry>
+<entry/>
+</row>
+<row>
+<entry/>
+<entry>Three homologous DFR </entry>
+<entry/>
+</row>
+<row>
+<entry/>
+<entry>genes of TaDFR-A, </entry>
+<entry/>
+</row>
+<row>
+<entry/>
+<entry>TaDFR-B and TaDFR-D</entry>
+<entry/>
+</row>
+<row>
+<entry/>
+<entry>localized in chromosome </entry>
+<entry/>
+</row>
+<row>
+<entry/>
+<entry>3A, 3B and 3D </entry>
+<entry/>
+</row>
+<row>
+<entry/>
+<entry>respectively are highly </entry>
+<entry/>
+</row>
+<row>
+<entry/>
+<entry>expressed in red and </entry>
+<entry/>
+</row>
+<row>
+<entry/>
+<entry>purple wheat grains.</entry>
+<entry/>
+</row>
+<row>
+<entry/>
+<entry>Five copies of ANS genes </entry>
+<entry/>
+</row>
+<row>
+<entry/>
+<entry>assigned to chromosomes </entry>
+<entry/>
+</row>
+<row>
+<entry/>
+<entry>6A (two copies), 6B (two</entry>
+<entry/>
+</row>
+<row>
+<entry/>
+<entry>copies) and 6D (one copy) </entry>
+<entry/>
+</row>
+<row>
+<entry/>
+<entry>have been sequenced in </entry>
+<entry/>
+</row>
+<row>
+<entry/>
+<entry>wheat.</entry>
+<entry/>
+</row>
+<row>
+<entry/>
+<entry>In purple wheat F3'5'H </entry>
+<entry/>
+</row>
+<row>
+<entry/>
+<entry>gene has been identified in </entry>
+<entry/>
+</row>
+<row>
+<entry/>
+<entry>2AL32, F3'5'H identified </entry>
+<entry/>
+</row>
+<row>
+<entry/>
+<entry>in 4D chromosome of blue </entry>
+<entry/>
+</row>
+<row>
+<entry/>
+<entry>wheat.</entry>
+<entry/>
+</row>
+<row>
+<entry/>
+<entry>Regulation of structural </entry>
+<entry/>
+</row>
+<row>
+<entry/>
+<entry>gene expression in the </entry>
+<entry/>
+</row>
+<row>
+<entry/>
+<entry>anthocyanin pathway is </entry>
+<entry/>
+</row>
+<row>
+<entry/>
+<entry>arranged by a ternary </entry>
+<entry/>
+</row>
+<row>
+<entry/>
+<entry>complex involving </entry>
+<entry/>
+</row>
+<row>
+<entry/>
+<entry>transcription factors from </entry>
+<entry/>
+</row>
+<row>
+<entry/>
+<entry>the MYB, bHLH and </entry>
+<entry/>
+</row>
+<row>
+<entry/>
+<entry>WD40 protein classes.</entry>
+<entry/>
+</row>
+<row>
+<entry/>
+<entry>Red grain color controlled </entry>
+<entry/>
+</row>
+<row>
+<entry/>
+<entry>by dominant Tamyb10 </entry>
+<entry/>
+</row>
+<row>
+<entry/>
+<entry>genes located on the long </entry>
+<entry/>
+</row>
+<row>
+<entry/>
+<entry>arm of chromosomes 3A, </entry>
+<entry/>
+</row>
+<row>
+<entry/>
+<entry>3B and 3D (R-A1, R-B1</entry>
+<entry/>
+</row>
+<row>
+<entry/>
+<entry>and R-D1, respectively),</entry>
+<entry/>
+</row>
+<row>
+<entry/>
+<entry>purple grain color by the </entry>
+<entry/>
+</row>
+<row>
+<entry/>
+<entry>Pp-1 genes and Pp3 </entry>
+<entry/>
+</row>
+<row>
+<entry/>
+<entry>located in chromosomes 7 </entry>
+<entry/>
+</row>
+<row>
+<entry/>
+<entry>and 2AL respectively </entry>
+<entry/>
+</row>
+<row>
+<entry/>
+<entry>(orthologs of both rice </entry>
+<entry/>
+</row>
+<row>
+<entry/>
+<entry>OsC1 and maize C1 which </entry>
+<entry/>
+</row>
+<row>
+<entry/>
+<entry>encode MYB-like </entry>
+<entry/>
+</row>
+<row>
+<entry/>
+<entry>transcription factors </entry>
+<entry/>
+</row>
+<row>
+<entry/>
+<entry>responsible for the</entry>
+<entry/>
+</row>
+<row>
+<entry/>
+<entry>activation of structural </entry>
+<entry/>
+</row>
+<row>
+<entry/>
+<entry>genes encrypting enzymes </entry>
+<entry/>
+</row>
+<row>
+<entry/>
+<entry>participating in </entry>
+<entry/>
+</row>
+<row>
+<entry/>
+<entry>anthocyanin biosynthesis.</entry>
+<entry/>
+</row>
+<row>
+<entry/>
+<entry>Flavonoid biosynthesis </entry>
+<entry/>
+</row>
+<row>
+<entry/>
+<entry>pathway enzymes include: </entry>
+<entry/>
+</row>
+<row>
+<entry/>
+<entry>PAL: phenylalanine </entry>
+<entry/>
+</row>
+<row>
+<entry/>
+<entry>ammonia-lyase; CHS: </entry>
+<entry/>
+</row>
+<row>
+<entry/>
+<entry>Chalcone Synthase; CHI:</entry>
+<entry/>
+</row>
+<row>
+<entry/>
+<entry>Chalcone Isomerase; F3H: </entry>
+<entry/>
+</row>
+<row>
+<entry/>
+<entry>Flavanone 3-hydroxylase; </entry>
+<entry/>
+</row>
+<row>
+<entry/>
+<entry>F3&#x2032;5&#x2032;H: Flavonoid 3&#x2032;,5&#x2032;-</entry>
+<entry/>
+</row>
+<row>
+<entry/>
+<entry>hydroxylase; F3&#x2032;H: </entry>
+<entry/>
+</row>
+<row>
+<entry/>
+<entry>Flavonoid 3&#x2032;-hydroxylase; </entry>
+<entry/>
+</row>
+<row>
+<entry/>
+<entry>DFR: Dihydro Flavonol-4-</entry>
+<entry/>
+</row>
+<row>
+<entry/>
+<entry>Reductase; ANS: </entry>
+<entry/>
+</row>
+<row>
+<entry/>
+<entry>Anthocyanidin Synthase;</entry>
+<entry/>
+</row>
+<row>
+<entry/>
+<entry>GT: Glycosyltransferase; </entry>
+<entry/>
+</row>
+<row>
+<entry/>
+<entry>FS: Flavone Synthase; </entry>
+<entry/>
+</row>
+<row>
+<entry/>
+<entry>FLS: Flavonol Synthase; </entry>
+<entry/>
+</row>
+<row>
+<entry/>
+<entry>IFS: Iso Flavone Synthase; </entry>
+<entry/>
+</row>
+<row>
+<entry/>
+<entry>AUS: Golden Grass </entry>
+<entry/>
+</row>
+<row>
+<entry/>
+<entry>Synthase; ANR: </entry>
+<entry/>
+</row>
+<row>
+<entry/>
+<entry>Anthocyanidin reductase.</entry>
+<entry/>
+</row>
+<row>
+<entry><i>Zea mays</i></entry>
+<entry>Anthocyanin</entry>
+<entry>Phosphorus or Nitrogen </entry>
+</row>
+<row>
+<entry/>
+<entry/>
+<entry>stress</entry>
+</row>
+<row>
+<entry><i>Zea mays</i></entry>
+<entry>Cytokinins</entry>
+<entry>Nitrogen/Nitrate </entry>
+</row>
+<row>
+<entry/>
+<entry/>
+<entry>reductase</entry>
+</row>
+<row>
+<entry><i>Zea mays</i></entry>
+<entry>Anthocyanin</entry>
+<entry>Phosphate deficiency</entry>
+</row>
+<row>
+<entry>Melon</entry>
+<entry>Phytoene synthase visual </entry>
+<entry>Watermelon mosaic </entry>
+</row>
+<row>
+<entry/>
+<entry>marker</entry>
+<entry>virus infection</entry>
+</row>
+<row>
+<entry>Poaceae</entry>
+<entry>Fluorescence emission</entry>
+<entry>UV-A radiation (e.g. </entry>
+</row>
+<row>
+<entry>(monocotyledonous</entry>
+<entry/>
+<entry>N2-laser 337 nm)</entry>
+</row>
+<row>
+<entry>plants)</entry>
+<entry/>
+<entry/>
+</row>
+<row>
+<entry>Purple rice</entry>
+<entry>Anthocyanins</entry>
+<entry>Nitrogen</entry>
+</row>
+<row>
+<entry>Tomato</entry>
+<entry>Anthocyanins/Carotenoids</entry>
+<entry>Parasitic plants of the </entry>
+</row>
+<row>
+<entry/>
+<entry/>
+<entry><i>Striga</i> and <i>Orobanche</i></entry>
+</row>
+<row>
+<entry/>
+<entry/>
+<entry>genera</entry>
+</row>
+<row>
+<entry>Citrus</entry>
+<entry>Visual reported gene: </entry>
+<entry>Genetic transformation </entry>
+</row>
+<row>
+<entry/>
+<entry>embryo-specific </entry>
+<entry>of citrus</entry>
+</row>
+<row>
+<entry/>
+<entry>anthocyanin regulatory </entry>
+<entry/>
+</row>
+<row>
+<entry/>
+<entry>gene</entry>
+<entry/>
+</row>
+<row>
+<entry><i>Zea mays</i></entry>
+<entry>Carotenoids</entry>
+<entry>Phytoene synthase gene</entry>
+</row>
+<row>
+<entry/>
+<entry/>
+<entry>(PSY1)</entry>
+</row>
+<row>
+<entry><i>Zea mays</i></entry>
+<entry>Anthocyanin production</entry>
+<entry>Maize c1, p1, a1, a4 pl </entry>
+</row>
+<row>
+<entry/>
+<entry/>
+<entry>genes and regulators R </entry>
+</row>
+<row>
+<entry/>
+<entry/>
+<entry>and C1</entry>
+</row>
+<row>
+<entry>Soybean</entry>
+<entry>Fluorescent protein</entry>
+<entry>Soybean disease</entry>
+</row>
+<row>
+<entry>Sugar beet</entry>
+<entry>Expression of butylin</entry>
+<entry>Virus</entry>
+</row>
+<row>
+<entry>Soybean</entry>
+<entry>Carotenoids elimination</entry>
+<entry>Micronutrients (e.g. </entry>
+</row>
+<row>
+<entry/>
+<entry/>
+<entry>copper)</entry>
+</row>
+<row>
+<entry><i>Zea mays</i></entry>
+<entry>Yellow stripe&#x2014;ys1, ys3</entry>
+<entry>Promoter region of GS1</entry>
+</row>
+<row>
+<entry/>
+<entry/>
+<entry>(Glutamine synthetase)</entry>
+</row>
+<row>
+<entry/>
+<entry/>
+<entry>isoforms Gln1-1, Gln1-</entry>
+</row>
+<row>
+<entry/>
+<entry/>
+<entry>2, Gln1-3 or Gln1-4 </entry>
+</row>
+<row>
+<entry/>
+<entry/>
+<entry>responsive to nitrogen </entry>
+</row>
+<row>
+<entry/>
+<entry/>
+<entry>deficiency</entry>
+</row>
+<row>
+<entry><i>Zea mays</i></entry>
+<entry>Old Gold Stripe&#x2014;og1</entry>
+<entry>Promoter region of GS1</entry>
+</row>
+<row>
+<entry/>
+<entry/>
+<entry>isoforms Gln1-1, Gln1-</entry>
+</row>
+<row>
+<entry/>
+<entry/>
+<entry>2, Gln1-3 or Gln1-4 </entry>
+</row>
+<row>
+<entry/>
+<entry/>
+<entry>responsive to nitrogen </entry>
+</row>
+<row>
+<entry/>
+<entry/>
+<entry>deficiency</entry>
+</row>
+<row>
+<entry><i>Zea mays</i></entry>
+<entry>Brown midrib&#x2014;bm1, </entry>
+<entry>Promoter region of GS1</entry>
+</row>
+<row>
+<entry/>
+<entry>bm2, bm3</entry>
+<entry>isoforms Gln1-1, Gln1-</entry>
+</row>
+<row>
+<entry/>
+<entry/>
+<entry>2, Gln1-3 or Gln1-4 </entry>
+</row>
+<row>
+<entry/>
+<entry/>
+<entry>responsive to nitrogen </entry>
+</row>
+<row>
+<entry/>
+<entry/>
+<entry>deficiency</entry>
+</row>
+<row>
+<entry namest="1" nameend="3" align="center" rowsep="1"/>
+</row>
+</tbody>
+</tgroup>
+</table>
+</tables>
