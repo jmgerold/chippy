@@ -59,22 +59,27 @@ def extract_table_nodes(xml_text: str) -> List[str]:
 #  Relevance check (stubbed)
 # ---------------------------------------------------------------------------#
 def llm_table_relevant(table_xml: str, requested_columns: list[str]) -> bool:
-    """Stub: randomly decides if a table is relevant."""
-    # Replace with a real OpenAI call when ready
-    return random.choice([True, False])
+    """Stub: always returns True for testing. Replace with real OpenAI call when ready."""
+    # For testing: always return True so we get results
+    return True
+    
+    # Original random logic (commented out for testing):
+    # return random.choice([True, False])
 
 
 # ---------------------------------------------------------------------------#
 #  Dummy conversions
 # ---------------------------------------------------------------------------#
 def xml_table_to_csv(table_xml: str) -> str:
-    """Wrap the table XML in quotes, escaping internal quotes, to form CSV."""
+    """Wrap the table XML in quotes, escaping internal quotes, to form CSV.
+    This is a dummy implementation - replace with real XML->CSV parser."""
     safe = table_xml.replace("\n", " ").replace('"', '""')
     return f'"{safe}"\n'
 
 
 def merge_csv_blobs(blobs: list[str]) -> str:
-    """Concatenate CSV fragments."""
+    """Concatenate CSV fragments.
+    This is a dummy implementation - replace with smart CSV merger."""
     return "".join(blobs)
 
 
