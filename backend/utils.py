@@ -9,11 +9,15 @@ from pathlib import Path
 from typing import List
 from xml.etree import ElementTree as ET
 
-from dotenv import load_dotenv
-
-load_dotenv()
-
-XML_DIR = Path(os.getenv("XML_STORE_DIR", "/app/patents"))
+# Handle both Docker and Modal environments
+if os.path.exists("/.dockerenv"):
+    # Running in Docker
+    from dotenv import load_dotenv
+    load_dotenv()
+    XML_DIR = Path(os.getenv("XML_STORE_DIR", "/app/patents"))
+else:
+    # Running in Modal or local
+    XML_DIR = Path("/app/patents")
 
 # ---------------------------------------------------------------------------#
 #  XML search helpers
