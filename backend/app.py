@@ -14,7 +14,7 @@ import uuid
 import gzip
 
 from fastapi import FastAPI, HTTPException
-from fastapi.responses import FileResponse, JSONResponse
+from fastapi.responses import FileResponse, JSONResponse, Response
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
@@ -47,12 +47,12 @@ print("FastAPI app created, adding routes...", file=sys.stderr)
 #  Orchestrator
 # ---------------------------------------------------------------------------#
 def build_csv_for_query(schema: DatasetSchema) -> str:
-    """Return (csv_text, temp_file_path)."""
+    """Return csv_text."""
     print(f"Created schema: {schema}", file=sys.stderr)
 
     matched_files = search_patent_files(schema.query)
     if not matched_files:
-        return ("", "no_matches.csv")
+        return ",".join(schema.columns)
 
     conn = get_sql_conn(schema)
 
@@ -60,32 +60,30 @@ def build_csv_for_query(schema: DatasetSchema) -> str:
         xml_text = gzip.open(path, 'rt', errors='ignore').read()
 
         xml_tables = extract_table_nodes(xml_text)
-        for i, tbl_xml in enumerate(xml_tables):
+        for i, table_xml in enumerate(xml_tables):
             if i > 1:
                 break
             print(f"Processing table {i} of {len(xml_tables)}", file=sys.stderr)
-            csv = xml_table_to_csv(tbl_xml)
+            structured_table = xml_table_to_csv(table_xml)
 
-            if not csv:
+            if not structured_table.csv:
                 continue
 
-            is_relevant, sql_command = is_table_relevant(csv, schema)
+            is_relevant, sql_command = is_table_relevant(structured_table, schema)
 
-            print(f"csv: {csv}", file=sys.stderr)
+            print(f"csv: {structured_table.csv}", file=sys.stderr)
 
             print(f"is_relevant: {is_relevant}, sql_command: {sql_command}", file=sys.stderr)
 
             if is_relevant:
-                add_secondary_sql_table(conn, csv, sql_command)
+                add_secondary_sql_table(conn, structured_table.csv, sql_command)
 
     primary_table = conn.sql("SELECT * FROM primary_table").df()
 
-    file_name = f"results_{uuid.uuid4().hex[:8]}.csv"
-    dest = Path("/tmp") / file_name
-    
-    primary_table.to_csv(dest, index=False)
+    if primary_table.empty:
+        return ",".join(schema.columns)
 
-    return str(dest)
+    return primary_table.to_csv(index=False)
 
 # ---------------------------------------------------------------------------#
 #  API routes
@@ -95,16 +93,16 @@ async def extract_data(payload: DatasetSchema):
     print(f"Received POST request to /api/extract with payload: {payload}", file=sys.stderr)
     
     try:
-        csv_path = build_csv_for_query(payload)
-        print(f"build_csv_for_query returned, path={csv_path}", file=sys.stderr)
+        csv_text = build_csv_for_query(payload)
+        print(f"build_csv_for_query returned, csv_text length={len(csv_text)}", file=sys.stderr)
     except Exception as e:
         print(f"ERROR in build_csv_for_query: {e}", file=sys.stderr)
         raise HTTPException(status_code=500, detail=f"Internal error: {str(e)}")
 
-    return FileResponse(
-        csv_path,
-        filename="patent_tables.csv",
+    return Response(
+        content=csv_text,
         media_type="text/csv",
+        headers={"Content-Disposition": "attachment; filename=patent_tables.csv"},
     )
 
 

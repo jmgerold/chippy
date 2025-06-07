@@ -6,6 +6,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const statusEl = document.getElementById('status');
     let columns = [];
     let nextColumnNumber = 1;
+    let loadingInterval;
+
+    function startLoadingAnimation() {
+        let dots = '.';
+        statusEl.textContent = `Processing${dots}`;
+        loadingInterval = setInterval(() => {
+            dots = dots.length < 3 ? dots + '.' : '.';
+            statusEl.textContent = `Processing${dots}`;
+        }, 500);
+    }
+
+    function stopLoadingAnimation(message = '') {
+        clearInterval(loadingInterval);
+        statusEl.textContent = message;
+    }
 
     function handleRename(span, oldName) {
         const input = document.createElement('input');
@@ -17,10 +32,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const finishEditing = () => {
             const newName = input.value.trim();
             if (newName && newName !== oldName) {
-                const oldIndex = columns.indexOf(oldName);
-                if (oldIndex > -1) {
-                    if (!columns.map(c => c.toLowerCase()).includes(newName.toLowerCase())) {
-                        columns[oldIndex] = newName;
+                const oldCol = columns.find(c => c.name === oldName);
+                if (oldCol) {
+                    if (!columns.some(c => c.name.toLowerCase() === newName.toLowerCase())) {
+                        oldCol.name = newName;
                     } else {
                         alert('Column name must be unique.');
                     }
@@ -40,7 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    function createColumnHeader(name) {
+    function createColumnHeader({ name, type }) {
         const th = document.createElement('th');
         const headerContent = document.createElement('div');
         headerContent.className = 'header-content';
@@ -51,10 +66,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const select = document.createElement('select');
         select.innerHTML = `
-            <option value="TEXT">TEXT</option>
-            <option value="NUMERIC">NUMERIC</option>
+            <option value="TEXT" ${type === 'TEXT' ? 'selected' : ''}>TEXT</option>
+            <option value="NUMERIC" ${type === 'NUMERIC' ? 'selected' : ''}>NUMERIC</option>
         `;
-        select.addEventListener('click', (e) => e.stopPropagation()); // prevent sorting or other header actions
+        select.addEventListener('click', (e) => e.stopPropagation());
+        select.addEventListener('change', (e) => {
+            const col = columns.find(c => c.name === name);
+            if (col) {
+                col.type = e.target.value;
+            }
+        });
 
         headerContent.appendChild(nameSpan);
         headerContent.appendChild(select);
@@ -65,8 +86,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function renderHeaders() {
         tableHeaders.innerHTML = '';
-        columns.forEach(colName => {
-            const header = createColumnHeader(colName);
+        columns.forEach(col => {
+            const header = createColumnHeader(col);
             tableHeaders.appendChild(header);
         });
 
@@ -77,25 +98,30 @@ document.addEventListener('DOMContentLoaded', () => {
         addColumnBtn.title = 'Add new column';
         addColumnBtn.addEventListener('click', () => {
             let newColName;
+            let i = nextColumnNumber;
             do {
-                newColName = `Column ${nextColumnNumber++}`;
-            } while (columns.includes(newColName));
+                newColName = `Column ${i++}`;
+            } while (columns.some(c => c.name === newColName));
+            nextColumnNumber = i;
             
-            columns.push(newColName);
+            columns.push({ name: newColName, type: 'TEXT' });
             render();
         });
         addColumnCell.appendChild(addColumnBtn);
         tableHeaders.appendChild(addColumnCell);
     }
 
-    function renderBody() {
+    function renderBody(data = []) {
         tableBody.innerHTML = '';
-        const numRows = 10;
+        const numRows = data.length > 0 ? data.length : 10;
+        const columnNames = columns.map(c => c.name);
+
         for (let i = 0; i < numRows; i++) {
             const tr = document.createElement('tr');
-            columns.forEach(() => {
+            const rowData = data[i] || {};
+            columnNames.forEach(colName => {
                 const td = document.createElement('td');
-                td.textContent = '...';
+                td.textContent = rowData[colName] || '...';
                 tr.appendChild(td);
             });
             // Empty cell for the '+' button column
@@ -110,13 +136,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     async function handleSearch() {
-        statusEl.textContent = "Processing… this may take a moment";
+        startLoadingAnimation();
         const query = searchBox.value.trim();
-        const currentColumns = [...columns];
-        const columnTypes = Array.from(tableHeaders.querySelectorAll('select')).map(s => s.value);
+        const currentColumns = columns.map(c => c.name);
+        const columnTypes = columns.map(c => c.type);
 
         if (!query || currentColumns.length === 0) {
-            statusEl.textContent = "❌ Please provide a search query and at least one column.";
+            stopLoadingAnimation("❌ Please provide a search query and at least one column.");
             return;
         }
 
@@ -129,28 +155,52 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (!response.ok) {
                 const { detail } = await response.json();
-                statusEl.textContent = `❌ ${detail || "Unknown error"}`;
+                stopLoadingAnimation(`❌ ${detail || "Unknown error"}`);
                 return;
             }
 
-            const blob = await response.blob();
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement("a");
-            a.href = url;
-            a.download = "patent_tables.csv";
-            document.body.appendChild(a);
-            a.click();
-            a.remove();
-            window.URL.revokeObjectURL(url);
-            statusEl.textContent = "✅ CSV downloaded!";
+            const csvText = await response.text();
+            const parsedData = parseCSV(csvText);
+            
+            // Update columns based on header from CSV
+            if (parsedData.length > 0) {
+                const header = Object.keys(parsedData[0]);
+                const existingTypes = new Map(columns.map(c => [c.name, c.type]));
+                columns = header.map(name => ({
+                    name,
+                    type: existingTypes.get(name) || 'TEXT'
+                }));
+            }
+
+            renderHeaders();
+            renderBody(parsedData);
+            stopLoadingAnimation(parsedData.length > 0 ? `✅ Loaded ${parsedData.length} rows.` : '✅ No results found.');
+
         } catch (err) {
             console.error(err);
-            statusEl.textContent = "❌ Failed to reach backend";
+            stopLoadingAnimation("❌ Failed to reach backend");
         }
+    }
+    
+    function parseCSV(text) {
+        if (!text) return [];
+        const lines = text.trim().split('\n');
+        const header = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g, ''));
+        const data = [];
+        for (let i = 1; i < lines.length; i++) {
+            if (lines[i].trim() === '') continue;
+            const values = lines[i].split(',').map(v => v.trim().replace(/^"|"$/g, ''));
+            const row = {};
+            for (let j = 0; j < header.length; j++) {
+                row[header[j]] = values[j];
+            }
+            data.push(row);
+        }
+        return data;
     }
 
     function init() {
-        columns = ["sequence", "UTC expression"];
+        columns = [{ name: "sequence", type: "TEXT" }, { name: "UTC expression", type: "TEXT" }];
         nextColumnNumber = columns.length + 1;
         render();
         searchButton.addEventListener('click', handleSearch);
