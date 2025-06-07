@@ -5,27 +5,112 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Patent Table Extractor</title>
   <style>
-    body { font-family: system-ui, sans-serif; margin: 2rem; }
-    label { display:block; margin-top:1rem; }
-    input, textarea { width: 100%; padding: .5rem; }
-    button { margin-top: 1rem; padding: .5rem 1rem; }
-    #status { margin-top:1rem; }
+    body {
+      font-family: system-ui, sans-serif;
+      margin: 0;
+      background-color: #f9fafb;
+    }
+    .container {
+      padding: 2rem;
+    }
+    .search-container {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 2rem;
+    }
+    .search-wrapper {
+      display: flex;
+      width: 60%;
+    }
+    #search-box {
+      flex-grow: 1;
+      padding: 0.75rem 1rem;
+      font-size: 1rem;
+      border-radius: 8px 0 0 8px;
+      border: 1px solid #d1d5db;
+      border-right: none;
+      outline: none;
+    }
+    #search-button {
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      border-radius: 0 8px 8px 0;
+      border: 1px solid #d1d5db;
+      background-color: #f0f0f0;
+      cursor: pointer;
+    }
+    #status {
+      text-align: center;
+      margin-top: -1rem;
+      margin-bottom: 1rem;
+      height: 1.2em;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: white;
+      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    th, td {
+      padding: 0.75rem 1.5rem;
+      text-align: left;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    th {
+      background-color: #f9fafb;
+      font-weight: 500;
+      color: #374151;
+      text-transform: capitalize;
+    }
+    td {
+        color: #6b7280;
+    }
+    #add-column-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 1.5rem;
+      color: #6b7280;
+      line-height: 1;
+    }
+    select {
+        margin-left: 0.5rem;
+        border: 1px solid #d1d5db;
+        border-radius: 4px;
+        padding: 0.25rem;
+        background-color: #f9fafb;
+    }
+    .header-content {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
   </style>
 </head>
 <body>
-  <h1>Patent Table Extractor</h1>
-  <form id="extract-form">
-    <label>
-      Search terms:
-      <input type="text" id="query" required placeholder="e.g. battery separator" />
-    </label>
-    <label>
-      Desired columns (comma‑separated):
-      <input type="text" id="columns" required placeholder="Material, Thickness, Temperature" />
-    </label>
-    <button type="submit">Extract</button>
-  </form>
-  <div id="status"></div>
+  <div class="container">
+    <div class="search-container">
+        <div class="search-wrapper">
+            <input type="text" id="search-box" placeholder="Enter your query..." />
+            <button id="search-button">Build</button>
+        </div>
+    </div>
+    <div id="status"></div>
+    <div id="table-container">
+      <table>
+        <thead>
+          <tr id="table-headers">
+            <!-- Headers will be added here by JS -->
+          </tr>
+        </thead>
+        <tbody id="table-body">
+            <!-- Empty rows will be added here -->
+        </tbody>
+      </table>
+    </div>
+  </div>
   <script src="script.js"></script>
 </body>
 </html>
