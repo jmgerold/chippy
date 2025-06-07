@@ -3,3 +3,4 @@ uvicorn[standard]==0.29.0
 python-multipart==0.0.9
 lxml==5.2.1
 python-dotenv==1.0.1
+openai
