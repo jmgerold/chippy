@@ -5,12 +5,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Patent Table Extractor</title>
   <style>
+    :root {
+      --primary-color: #4f46e5;
+      --background-color: #f8fafc;
+      --card-background: #ffffff;
+      --text-color: #334155;
+      --subtle-text-color: #64748b;
+      --border-color: #e2e8f0;
+      --hover-color: #f1f5f9;
+    }
     body {
-      font-family: system-ui, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       margin: 0;
-      background-color: #f9fafb;
+      background-color: var(--background-color);
+      color: var(--text-color);
     }
     .container {
+      max-width: 1200px;
+      margin: 0 auto;
       padding: 2rem;
     }
     .search-container {
@@ -20,72 +32,105 @@
     }
     .search-wrapper {
       display: flex;
-      width: 60%;
+      width: 100%;
+      max-width: 600px;
     }
     #search-box {
       flex-grow: 1;
       padding: 0.75rem 1rem;
       font-size: 1rem;
       border-radius: 8px 0 0 8px;
-      border: 1px solid #d1d5db;
+      border: 1px solid var(--border-color);
       border-right: none;
       outline: none;
+      background-color: var(--card-background);
+      transition: box-shadow 0.2s;
+    }
+    #search-box:focus {
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.3);
     }
     #search-button {
       padding: 0.75rem 1.5rem;
       font-size: 1rem;
+      font-weight: 500;
       border-radius: 0 8px 8px 0;
-      border: 1px solid #d1d5db;
-      background-color: #f0f0f0;
+      border: 1px solid var(--primary-color);
+      background-color: var(--primary-color);
+      color: white;
       cursor: pointer;
+      transition: background-color 0.2s;
+    }
+    #search-button:hover {
+      background-color: #4338ca;
     }
     #status {
       text-align: center;
-      margin-top: -1rem;
-      margin-bottom: 1rem;
+      margin-bottom: 2rem;
       height: 1.2em;
+      color: var(--subtle-text-color);
+    }
+    .table-container {
+      background-color: var(--card-background);
+      border-radius: 8px;
+      box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      border: 1px solid var(--border-color);
+      overflow: hidden;
     }
     table {
       width: 100%;
       border-collapse: collapse;
-      background-color: white;
-      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-      border-radius: 8px;
-      overflow: hidden;
     }
     th, td {
-      padding: 0.75rem 1.5rem;
+      padding: 1rem 1.5rem;
       text-align: left;
-      border-bottom: 1px solid #e5e7eb;
+      border-bottom: 1px solid var(--border-color);
     }
     th {
       background-color: #f9fafb;
-      font-weight: 500;
-      color: #374151;
+      font-weight: 600;
+      color: var(--text-color);
       text-transform: capitalize;
     }
+    tr:last-child td {
+        border-bottom: none;
+    }
+    tr:hover {
+        background-color: var(--hover-color);
+    }
     td {
-        color: #6b7280;
+        color: var(--subtle-text-color);
     }
     #add-column-btn {
       background: none;
-      border: none;
+      border: 1px dashed var(--border-color);
       cursor: pointer;
-      font-size: 1.5rem;
-      color: #6b7280;
+      font-size: 1.2rem;
+      color: var(--subtle-text-color);
       line-height: 1;
+      border-radius: 6px;
+      padding: 0.25rem 0.5rem;
+      transition: all 0.2s;
+    }
+    #add-column-btn:hover {
+        background-color: var(--hover-color);
+        border-color: var(--primary-color);
+        color: var(--primary-color);
     }
     select {
         margin-left: 0.5rem;
-        border: 1px solid #d1d5db;
+        border: 1px solid var(--border-color);
         border-radius: 4px;
         padding: 0.25rem;
-        background-color: #f9fafb;
+        background-color: var(--background-color);
+        color: var(--subtle-text-color);
     }
     .header-content {
         display: flex;
         align-items: center;
         justify-content: space-between;
+    }
+    .header-content span {
+        cursor: pointer;
     }
   </style>
 </head>
@@ -93,12 +138,12 @@
   <div class="container">
     <div class="search-container">
         <div class="search-wrapper">
-            <input type="text" id="search-box" placeholder="Enter your query..." />
-            <button id="search-button">Build</button>
+            <input type="text" id="search-box" placeholder="Describe the patent table you want to find..." />
+            <button id="search-button">Build Table</button>
         </div>
     </div>
     <div id="status"></div>
-    <div id="table-container">
+    <div id="table-container" class="table-container">
       <table>
         <thead>
           <tr id="table-headers">
@@ -106,7 +151,7 @@
           </tr>
         </thead>
         <tbody id="table-body">
-            <!-- Empty rows will be added here -->
+            <!-- Data rows will be added here -->
         </tbody>
       </table>
     </div>

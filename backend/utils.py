@@ -45,7 +45,10 @@ def search_patent_files(query: str, limit: int = 3) -> List[Path]:
             continue
 
         if query in text:
-            matches.append(path)
+            pass # check if the text contains the query - disabled for testing on 1 file!
+        
+        matches.append(path)
+        
         if len(matches) == limit:
             break
     return matches
@@ -67,26 +70,15 @@ def extract_table_nodes(xml_text: str) -> List[str]:
 #  LLM Calls
 # ---------------------------------------------------------------------------#
 
-def is_table_relevant(csv_content: str, schema: DatasetSchema) -> tuple[bool, str]:
+def is_table_relevant(table: Table, schema: DatasetSchema) -> tuple[bool, str]:
     """Check if the table is relevant to the requested columns."""
-    
-    # Parse CSV to create a Table object for the prompt
-    lines = csv_content.strip().split('\n')
-    if not lines:
-        return False, ""
-    
-    # Create a simple Table object for the prompt
-    # This is a simplified approach - in a real implementation you'd parse the CSV properly
-    table = Table(
-        table_description="Extracted table from patent document",
-        column_descriptions=[],  # Could be populated from CSV headers
-        csv=csv_content
-    )
 
     prompt = create_relevance_prompt(schema, table)
 
+    print("PROMPT: ", prompt)
+
     response = client.beta.chat.completions.parse(
-        model="gpt-4.1-mini",
+        model="gpt-4.1",
         messages=[
             {"role": "user", "content": prompt}
         ],
@@ -119,19 +111,19 @@ def xml_table_to_csv(table_xml: str) -> str:
         )
         
         # Extract the structured response
-        table_data = response.choices[0].message.parsed
+        structured_table = response.choices[0].message.parsed
         
-        if not table_data or not table_data.csv:
+        if not structured_table or not structured_table.csv:
             print("Warning: OpenAI returned empty or invalid CSV, falling back to dummy implementation")
             safe = table_xml.replace("\n", " ").replace('"', '""')
             return f'"{safe}"\n'
         
         # Log the table description for debugging/monitoring
-        print(f"Table description: {table_data.table_description}")
+        print(f"Table description: {structured_table.table_description}")
         
         # test if the csv is valid
         try:
-            df = pd.read_csv(StringIO(table_data.csv))
+            df = pd.read_csv(StringIO(structured_table.csv))
             if df.empty:
                 print("CSV is empty")
                 return False
@@ -139,9 +131,9 @@ def xml_table_to_csv(table_xml: str) -> str:
             print(f"Invalid CSV format: {e}")
             return False
         
-        table_data.csv = fix_cell_overflow(table_data.csv)
+        structured_table.csv = fix_cell_overflow(structured_table.csv)
             
-        return table_data.csv
+        return structured_table
         
     except Exception as e:
         print(f"Error calling OpenAI API: {e}")
