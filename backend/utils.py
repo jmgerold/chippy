@@ -7,16 +7,28 @@ import random
 from pathlib import Path
 from typing import List
 from xml.etree import ElementTree as ET
+from dotenv import load_dotenv
+from openai import OpenAI
+import pandas as pd
+from io import StringIO
+import gzip
+
+from .prompts import create_xml_to_csv_prompt, create_relevance_prompt
+from .formats import Table, DatasetSchema, SQL
+
+
+# Initialize OpenAI client
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 # Handle both Docker and Modal environments
 if os.path.exists("/.dockerenv"):
-    # Running in Docker
-    from dotenv import load_dotenv
-    load_dotenv()
-    XML_DIR = Path(os.getenv("XML_STORE_DIR", "/app/patents"))
+   # Running in Docker
+   load_dotenv()
+   XML_DIR = Path(os.getenv("XML_STORE_DIR", "/app/patents"))
 else:
-    # Running in Modal or local
-    XML_DIR = Path("/app/patents")
+   # Running in Modal or local
+   XML_DIR = Path("/app/patents")
+
 
 # ---------------------------------------------------------------------------#
 #  XML search helpers
