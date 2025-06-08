@@ -16,12 +16,19 @@ import gzip
 from .prompts import create_xml_to_csv_prompt, create_relevance_prompt
 from .formats import Table, DatasetSchema, SQL
 
-load_dotenv()
-
-XML_DIR = Path(os.getenv("XML_STORE_DIR", "/app/patents"))
 
 # Initialize OpenAI client
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+
+# Handle both Docker and Modal environments
+if os.path.exists("/.dockerenv"):
+   # Running in Docker
+   load_dotenv()
+   XML_DIR = Path(os.getenv("XML_STORE_DIR", "/app/patents"))
+else:
+   # Running in Modal or local
+   XML_DIR = Path("/app/patents")
+
 
 # ---------------------------------------------------------------------------#
 #  XML search helpers
