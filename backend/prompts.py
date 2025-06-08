@@ -55,6 +55,7 @@ def create_relevance_prompt(schema: DatasetSchema, new_table: Table) -> str:
     2. If compatible, generate SQL:
     - Stack secondary_table into primary_table using INSERT INTO
     - Map column names appropriately
+    - You may also set constants if data is found in the title which should be used for all rows
 
     Output Format:
     - is_relevant: boolean
