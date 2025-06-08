@@ -22,7 +22,9 @@ image = (
         "python-multipart==0.0.9",
         "lxml==5.2.1",
         "python-dotenv==1.0.1",
-        "openai"  # For future OpenAI integration
+        "openai",  # For future OpenAI integration
+        "duckdb",
+        "pandas"
     ])
     # Create patents directory in the image BEFORE adding local files
     .run_commands("mkdir -p /app/patents")
@@ -43,26 +45,18 @@ patents_volume = modal.Volume.from_name("patent-harvester-data", create_if_missi
     image=image,
     volumes={"/app/patents": patents_volume},  # Patent files storage
     # Commenting out secret for now - uncomment when you create it
-    # secrets=[modal.Secret.from_name("openai-secret")],  # OpenAI API key
+    secrets=[modal.Secret.from_name("openai-secret")],  # OpenAI API key
     timeout=300,  # 5 minute timeout
     min_containers=0,   # Keep 1 instance warm to avoid cold starts
-    max_containers=0,
+    max_containers=2,
 )
 @modal.asgi_app()
 def fastapi_app():
-    """Your existing FastAPI app, unchanged"""
-    import sys
+    import sys, os
     sys.path.append("/app")
-    
-    # Set environment variable for XML directory
-    import os
     os.environ["XML_STORE_DIR"] = "/app/patents"
-    
-    # Import your existing FastAPI app
     from backend.app import app as existing_app
     return existing_app
-
-
 # Utility function to upload test data
 @app.function(
     image=image,
@@ -143,7 +137,7 @@ def upload_local_patents(local_dir: str = "./patents"):
     
     # Or upload individually
     if len(xml_files) < 10:
-        with modal.app.run():
+        with app.run():
             for xml_file in xml_files:
                 print(f"Uploading {xml_file.name}...")
                 # This would require a function to handle individual uploads
