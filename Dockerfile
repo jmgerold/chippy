@@ -13,7 +13,7 @@ ENV PYTHONPATH="/app"
 
 # at top, after your existing ENVs
 ENV XML_STORE_DIR=/app/patents \
-    MAX_TABLES_PER_FILE=100 \
+    MAX_TABLES_PER_FILE=10 \
     MAX_WORKERS=8
 
 

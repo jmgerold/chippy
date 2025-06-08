@@ -29,7 +29,7 @@ from pydantic import BaseModel, Field
 
 # Configuration
 MAX_WORKERS = int(os.getenv("MAX_WORKERS", "8"))
-MAX_TABLES_PER_FILE = int(os.getenv("MAX_TABLES_PER_FILE", "100"))
+MAX_TABLES_PER_FILE = int(os.getenv("MAX_TABLES_PER_FILE", "10"))
 
 # Add debug logging
 print("Starting app.py import...", file=sys.stderr)
