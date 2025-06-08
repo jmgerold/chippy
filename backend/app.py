@@ -66,7 +66,7 @@ def build_csv_for_query(schema: DatasetSchema) -> str:
             print(f"Processing table {i} of {len(xml_tables)}", file=sys.stderr)
             structured_table = xml_table_to_csv(table_xml)
 
-            if not structured_table.csv:
+            if not structured_table:
                 continue
 
             is_relevant, sql_command = is_table_relevant(structured_table, schema)
