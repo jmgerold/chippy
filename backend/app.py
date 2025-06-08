@@ -29,7 +29,7 @@ from pydantic import BaseModel, Field
 
 # Configuration
 MAX_WORKERS = int(os.getenv("MAX_WORKERS", "8"))
-MAX_TABLES_PER_FILE = int(os.getenv("MAX_TABLES_PER_FILE", "10"))
+MAX_TABLES_PER_FILE = int(os.getenv("MAX_TABLES_PER_FILE", "100"))
 
 # Add debug logging
 print("Starting app.py import...", file=sys.stderr)
@@ -231,6 +231,7 @@ async def extract_data(payload: DatasetSchema):
     # --- Start of synchronous discovery ---
     update_progress(task_id, status="searching_files")
     matched_files = search_patent_files(payload.query)
+    
     
     if not matched_files:
         update_progress(task_id, status="completed", message="No matching files found.")
