@@ -10,4 +10,11 @@ COPY frontend/ /app/frontend/
 RUN mkdir -p /app/patents
 # Expose files in /frontend as static assets via FastAPI
 ENV PYTHONPATH="/app"
+
+# at top, after your existing ENVs
+ENV XML_STORE_DIR=/app/patents \
+    MAX_TABLES_PER_FILE=100 \
+    MAX_WORKERS=8
+
+
 CMD ["uvicorn", "backend.app:app", "--host", "0.0.0.0", "--port", "8000"]

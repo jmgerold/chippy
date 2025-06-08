@@ -29,7 +29,7 @@ from pydantic import BaseModel, Field
 
 # Configuration
 MAX_WORKERS = int(os.getenv("MAX_WORKERS", "8"))
-MAX_TABLES_PER_FILE = int(os.getenv("MAX_TABLES_PER_FILE", "10"))
+MAX_TABLES_PER_FILE = int(os.getenv("MAX_TABLES_PER_FILE", "100"))
 
 # Add debug logging
 print("Starting app.py import...", file=sys.stderr)
@@ -166,6 +166,7 @@ def build_csv_for_query_parallel(schema: DatasetSchema, task_id: str) -> str:
     # Search for files
     update_progress(task_id, status="searching_files")
     matched_files = search_patent_files(schema.query)
+    
     
     if not matched_files:
         update_progress(task_id, status="completed", processed_files=0, message="No matching files found.")
