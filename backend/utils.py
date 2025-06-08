@@ -109,7 +109,7 @@ def xml_table_to_csv(table_xml: str) -> str:
         
         # Call OpenAI API with structured outputs
         response = client.beta.chat.completions.parse(
-            model="gpt-4.1-mini",
+            model="gpt-4.1-nano",
             messages=[
                 {"role": "user", "content": prompt}
             ],

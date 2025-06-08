@@ -4,10 +4,17 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Patent Table Extractor</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <style>
+    @font-face {
+      font-family: 'RecklessTRIAL';
+      src: url('fonts/RecklessTRIAL-Regular.woff2') format('woff2');
+      font-weight: normal;
+      font-style: normal;
+    }
     :root {
-      --primary-color: #4f46e5;
-      --background-color: #f8fafc;
+      --primary-color: rgb(31 64 237);
+      --background-color: #f7f5ee;
       --card-background: #ffffff;
       --text-color: #334155;
       --subtle-text-color: #64748b;
@@ -16,12 +23,30 @@
       --success-color: #10b981;
       --error-color: #ef4444;
       --warning-color: #f59e0b;
+      --table-header-background: #f9fafb;
     }
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       margin: 0;
       background-color: var(--background-color);
       color: var(--text-color);
+    }
+    .title-container {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+    .title-container h1 {
+      font-family: 'RecklessTRIAL', serif;
+      font-size: 4rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: var(--text-color);
+    }
+    .title-container h2 {
+      font-size: 1.5rem;
+      font-weight: 400;
+      color: var(--subtle-text-color);
+      margin: 0;
     }
     .container {
       max-width: 1200px;
@@ -37,34 +62,49 @@
       display: flex;
       width: 100%;
       max-width: 600px;
+      position: relative;
     }
     #search-box {
       flex-grow: 1;
-      padding: 0.75rem 1rem;
+      padding: 0.75rem 3.5rem 0.75rem 1rem;
       font-size: 1rem;
-      border-radius: 8px 0 0 8px;
+      border-radius: 8px;
       border: 1px solid var(--border-color);
-      border-right: none;
       outline: none;
       background-color: var(--card-background);
-      transition: box-shadow 0.2s;
+      transition: border-color 0.2s;
     }
     #search-box:focus {
-      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.3);
+      border-color: #d1d5db;
+    }
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover,
+    input:-webkit-autofill:focus,
+    select:-webkit-autofill,
+    select:-webkit-autofill:hover,
+    select:-webkit-autofill:focus {
+      -webkit-text-fill-color: var(--text-color);
+      -webkit-box-shadow: 0 0 0px 1000px var(--card-background) inset;
+      transition: background-color 5000s ease-in-out 0s;
     }
     #search-button {
-      padding: 0.75rem 1.5rem;
-      font-size: 1rem;
-      font-weight: 500;
-      border-radius: 0 8px 8px 0;
-      border: 1px solid var(--primary-color);
-      background-color: var(--primary-color);
-      color: white;
+      position: absolute;
+      right: 0;
+      top: 0;
+      height: 100%;
+      width: 3.5rem;
+      background: transparent;
+      border: none;
+      color: var(--subtle-text-color);
       cursor: pointer;
-      transition: background-color 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      transition: color 0.2s;
     }
     #search-button:hover:not(:disabled) {
-      background-color: #4338ca;
+      color: var(--primary-color);
     }
     #search-button:disabled {
       opacity: 0.6;
@@ -85,7 +125,7 @@
       border: 1px solid var(--border-color);
       padding: 1.5rem;
       margin-bottom: 2rem;
-      display: none;
+      display: none !important; /* Force hide the progress card */
     }
     .progress-card.active {
       display: block;
@@ -120,7 +160,7 @@
     }
     .progress-details {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 1rem;
     }
     .progress-item {
@@ -172,10 +212,38 @@
       margin-bottom: 0;
     }
     
+    .status-badge {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 12px;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .status-badge.match {
+      color: #065f46;
+      background-color: #d1fae5;
+    }
+
+    .status-badge.miss {
+      color: #991b1b;
+      background-color: #fee2e2;
+    }
+
+    .status-badge.loading {
+      color: #a16207;
+      background-color: #fef9c3;
+    }
+    
+    .status-cell {
+      text-align: center;
+      font-size: 1.2rem;
+    }
+    
     /* Table Styles */
     .table-container {
       background-color: var(--card-background);
-      border-radius: 8px;
+      border-radius: 0px;
       box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
       border: 1px solid var(--border-color);
       overflow: hidden;
@@ -185,12 +253,13 @@
       border-collapse: collapse;
     }
     th, td {
-      padding: 1rem 1.5rem;
+      padding: 0.5rem 1.5rem;
       text-align: left;
       border-bottom: 1px solid var(--border-color);
+      border-right: 1px solid var(--border-color);
     }
     th {
-      background-color: #f9fafb;
+      background-color: var(--table-header-background);
       font-weight: 600;
       color: var(--text-color);
       text-transform: capitalize;
@@ -204,20 +273,35 @@
     td {
         color: var(--subtle-text-color);
     }
+    th:last-child, td:last-child {
+        border-right: none;
+        width: 3.5rem;
+        padding: 0;
+        vertical-align: middle;
+    }
     #add-column-btn {
       background: none;
-      border: 1px dashed var(--border-color);
+      border: none;
       cursor: pointer;
       font-size: 1.2rem;
       color: var(--subtle-text-color);
       line-height: 1;
-      border-radius: 6px;
-      padding: 0.25rem 0.5rem;
-      transition: all 0.2s;
+      padding: 0;
+      transition: color 0.2s;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
-    #add-column-btn:hover {
+    th:last-child {
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+    th:last-child:hover {
         background-color: var(--hover-color);
-        border-color: var(--primary-color);
+    }
+    th:last-child:hover #add-column-btn {
         color: var(--primary-color);
     }
     select {
@@ -225,7 +309,7 @@
         border: 1px solid var(--border-color);
         border-radius: 4px;
         padding: 0.25rem;
-        background-color: var(--background-color);
+        background-color: var(--card-background);
         color: var(--subtle-text-color);
     }
     .header-content {
@@ -240,10 +324,14 @@
 </head>
 <body>
   <div class="container">
+    <div class="title-container">
+        <h1>Chippy</h1>
+        <h2>Massively aggregate patent data.</h2>
+    </div>
     <div class="search-container">
         <div class="search-wrapper">
             <input type="text" id="search-box" placeholder="Describe the patent table you want to find..." />
-            <button id="search-button">Build Table</button>
+            <button id="search-button"><i class="fa-solid fa-arrow-right"></i></button>
         </div>
     </div>
     <div id="status"></div>

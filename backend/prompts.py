@@ -56,6 +56,7 @@ def create_relevance_prompt(schema: DatasetSchema, new_table: Table) -> str:
     - Stack secondary_table into primary_table using INSERT INTO
     - Map column names appropriately
     - You may also set constants if data is found in the title which should be used for all rows
+    - IMPORTANT: The secondary_table automatically includes "USPTO_ID" and "Table_No" as the first two columns containing metadata. These MUST be included in your INSERT statement.
 
     Output Format:
     - is_relevant: boolean
@@ -66,5 +67,6 @@ def create_relevance_prompt(schema: DatasetSchema, new_table: Table) -> str:
 
     Secondary Table:
     Description: {new_table.table_description}
-    Columns: {[col.column_name + ": " + col.description for col in new_table.column_descriptions]}
-    Data Sample: {new_table.csv.split(newline_char)[0:3]}"""
+    Columns: {["USPTO_ID", "Table_No"] + [col.column_name + ": " + col.description for col in new_table.column_descriptions]}
+    Data Sample: {new_table.csv.split(newline_char)[0:3]}
+    """

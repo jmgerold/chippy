@@ -23,7 +23,7 @@ def get_sql_conn(schema: DatasetSchema) -> duckdb.duckdb.DuckDBPyConnection:
     
     return conn
 
-def add_secondary_sql_table(conn: duckdb.duckdb.DuckDBPyConnection, csv: str, sql_command: str = "") -> bool:
+def add_secondary_sql_table(conn: duckdb.duckdb.DuckDBPyConnection, csv: str, sql_command: str = "", USPTO_ID: str = "", table_no: int = 0) -> bool:
 
     try: 
         with open('/tmp/secondary_table.csv', 'w') as f:
@@ -50,9 +50,14 @@ def add_secondary_sql_table(conn: duckdb.duckdb.DuckDBPyConnection, csv: str, sq
         
         conditions = " AND ".join([f"{col} IS NULL" for col in column_names])
 
+        # Add USPTO_ID and Table_No columns to the filtered data
         conn.execute(f"""
         CREATE TABLE secondary_table AS
-        SELECT * FROM csv_read WHERE NOT ({conditions});
+        SELECT 
+            '{USPTO_ID}' AS "USPTO_ID",
+            '{table_no}' AS "Table_No",
+            *
+        FROM csv_read WHERE NOT ({conditions});
         """)
         
         # Execute the SQL command from the relevance check if provided
