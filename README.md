@@ -10,8 +10,7 @@ This repo provides a minimal FastAPI‑based web application that locates tables
 
 ```bash
 # 1.  Create & edit .env
-cp .env.example .env
-# (optionally put your OpenAI key if you hook up real relevance checks)
+cp .env_template .env #populate your OpenAI key
 
 # 2.  Build & run
 docker compose up --build
