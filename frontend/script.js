@@ -200,7 +200,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function init() {
-        columns = [{ name: "sequence", type: "TEXT" }, { name: "UTC expression", type: "TEXT" }];
+        columns = [{ name: "sequence", type: "TEXT" }, { name: "UTC_expression", type: "TEXT" }];
         nextColumnNumber = columns.length + 1;
         render();
         searchButton.addEventListener('click', handleSearch);
