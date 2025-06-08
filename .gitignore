@@ -1,3 +1,9 @@
 /patents
 !/patents/20240002852-application.xml.gz
 .env
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pyw
+*.pyz
