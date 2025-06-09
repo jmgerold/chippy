@@ -1,8 +1,6 @@
-# Patent Table Extractor (Local Docker App)
+# Clippy
 
-This repo provides a minimal FastAPI‑based web application that locates tables inside a set of patent XML files and (stub) extracts them into a single CSV, returned to the user from a simple HTML page.
-
-> **Important** – heavy tasks such as LLM relevance checking and XML→CSV parsing are stubbed so the stack runs without extra credentials or compute. Swap the corresponding functions in `backend/utils.py` with real implementations when ready.
+Chippy turns patent data extraction into a trivial task. Our solution uses user-defined descriptions of relevant data contexts and desired output columns to automatically produce tabular data from patents and execute SQL upon them. Chippy leverages LLMs to greatly simplify the extremely tedious task of sifting through patents riddled with OCR malformatting, low average relevance, and difficult table merging decisions.
 
 ---
 
